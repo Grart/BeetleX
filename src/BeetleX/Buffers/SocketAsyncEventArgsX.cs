@@ -54,9 +54,9 @@ namespace BeetleX.Buffers
 #endif
             var lastSocket = LastSocket;
             LastSocket = socket;
-            if (!socket.ReceiveAsync(this))
-            {
-                if (lastSocket == socket)
+            if (!socket.ReceiveAsync(this))///base.Completed <see cref="SocketAsyncEventArgs.Completed"/> 
+			{
+				if (lastSocket == socket)
                 {
                     LoopCount++;
                 }
