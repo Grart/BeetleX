@@ -397,7 +397,10 @@ namespace BeetleX.Clients
             mReceiveMessage = message;
         }
 
-        private void OnWriterFlash(IBuffer data)
+		/// <summary>
+		/// <see cref="PipeStream.Flush"/> call
+		/// </summary>
+		private void OnWriterFlash(IBuffer data)
         {
             int index = 0;
             if (data == null)
@@ -795,9 +798,9 @@ namespace BeetleX.Clients
                 buffer.UserToken = this;
                 try
                 {
-                    buffer.AsyncFrom(mReceiveEventArgs, mSocket);
-                }
-                catch (Exception e_)
+                    buffer.AsyncFrom(mReceiveEventArgs, mSocket);/// see ref=<see cref="SocketAsyncEventArgs.Completed"/>
+				}
+				catch (Exception e_)
                 {
                     InitReceiveState();
                     buffer.Free();
