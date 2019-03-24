@@ -11,8 +11,8 @@ namespace BeetleX.Buffers
     {
         protected override void OnCompleted(SocketAsyncEventArgs e)
         {
-            base.OnCompleted(e);
-            if (e.SocketError != SocketError.Success)
+            base.OnCompleted(e);//to call Completed
+			if (e.SocketError != SocketError.Success)
             {
                 LastSocket = null;
             }
@@ -98,7 +98,20 @@ namespace BeetleX.Buffers
 #endif
             var lastSocket = LastSocket;
             LastSocket = socket;
-            if (!socket.SendAsync(this))
+			/*https://docs.microsoft.com/zh-cn/dotnet/api/system.net.sockets.socket.sendasync?view=netframework-4.7.2
+			 public bool SendAsync (System.Net.Sockets.SocketAsyncEventArgs e);
+			参数
+			e
+			SocketAsyncEventArgs
+			要用于此异步套接字操作的 SocketAsyncEventArgs 对象。
+			返回
+			Boolean
+			如果 I/O 操作挂起，则为 true。 操作完成时，将引发 e 参数的 Completed 事件。
+
+			如果 I/O 操作同步完成，则为 false。 在这种情况下，将不会引发 e 参数的 Completed 事件，
+			并且可能在方法调用返回后立即检查作为参数传递的 e 对象以检索操作的结果。
+			*/
+			if (!socket.SendAsync(this))
             {
                 if (lastSocket == socket)
                 {
