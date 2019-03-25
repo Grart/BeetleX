@@ -1,4 +1,5 @@
 .vs
+/.vs
 Chat.Client/bin/
 Chat.Client/obj/
 Chat.Server/bin/
