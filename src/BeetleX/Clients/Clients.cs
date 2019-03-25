@@ -655,7 +655,12 @@ namespace BeetleX.Clients
             }
         }
 
-        private static void IO_Completed(object sender, SocketAsyncEventArgs e)
+		/// <summary>
+		/// <see cref="AsyncTcpClient.Connect"/> mReceiveEventArgs.Completed += IO_Completed
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private static void IO_Completed(object sender, SocketAsyncEventArgs e)
         {
             Buffers.SocketAsyncEventArgsX ex = (Buffers.SocketAsyncEventArgsX)e;
             AsyncTcpClient tcpclient = (AsyncTcpClient)e.UserToken;
@@ -735,7 +740,11 @@ namespace BeetleX.Clients
             }
         }
 
-        private static void SendCompleted(SocketAsyncEventArgs e)
+		/// <summary>
+		/// <see cref="AsyncTcpClient.Connect"/> mReceiveEventArgs.Completed += IO_Completed
+		/// <see cref="AsyncTcpClient.IO_Completed"/>
+		/// </summary>
+		private static void SendCompleted(SocketAsyncEventArgs e)
         {
             SocketAsyncEventArgsX ex = (SocketAsyncEventArgsX)e;
             Buffers.Buffer buffer = (Buffers.Buffer)ex.BufferX;
@@ -1096,14 +1105,15 @@ namespace BeetleX.Clients
 
         }
 
-        internal void CommitBuffer(IBuffer buffer)
+		internal void CommitBuffer(IBuffer buffer)
         {
             try
             {
 
                 Buffers.Buffer bf = (Buffers.Buffer)buffer;
                 bf.UserToken = this;
-                ((Buffers.Buffer)buffer).AsyncTo(this.mSendEventArgs, this.Socket);
+				/// <see cref="AsyncTcpClient.Connect"/> mSendEventArgs.Completed += IO_Completed
+				((Buffers.Buffer)buffer).AsyncTo(this.mSendEventArgs, this.Socket);
             }
             catch (Exception e_)
             {
@@ -1113,15 +1123,22 @@ namespace BeetleX.Clients
             }
         }
 
-        private void SendCompleted()
+		/// <summary>
+		/// static <see cref="AsyncTcpClient.SendCompleted"/> call
+		/// </summary>
+		private void SendCompleted()
         {
             System.Threading.Interlocked.Exchange(ref mSendStatus, 0);
             ProcessSendMessages();
         }
 
-        private void OnWriterFlash(IBuffer data)
+		/// <summary>
+		/// <see cref="PipeStream.Flush"/>
+		/// <see cref="PipeStream.FlashCompleted"/>
+		/// </summary>
+		private void OnWriterFlash(IBuffer data)
         {
-            if (data != null)
+			if (data != null)
                 Send(data);
         }
 
